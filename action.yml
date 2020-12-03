@@ -1,0 +1,28 @@
+name: 'Publish security assessments to Azure'
+description: 'Publish security assessments to Azure'
+inputs:
+  artifact-type:
+    description: 'The artifact that was scanned. Supported options - “containerImage”. This will be the default value.'
+    required: true
+    default: 'containerImage'
+  artifact-id:
+    description: 'Unique identifier for the artifact. For artifact-type “containerImage”, the action will take image digest as artifact-id by default by using a Docker command.'
+    required: false
+  subscription-token:
+    description: 'MS managed subscription token.'
+    required: true
+  instrumentation-key:
+    description: 'Application insights instrumentation key of the personal AI instance.'
+    required: false
+  connection-string:
+    description: 'Application insights connection string. If instrumentation-key is also provided, the connection-string is used.'
+    required: false
+  scan-provider:
+    description: 'The tool used to scan the artifact. For “containerImage”, the action will only support “trivy” as a provider. This will be the default value.'
+    required: true
+  scan-results-path:
+    description: 'Path to the file containing scan results. Based on the scan-provider, supported file types and result schema may change.'
+    required: true
+runs:
+  using: 'node12'
+  main: 'lib/run.js'
