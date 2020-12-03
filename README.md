@@ -63,6 +63,7 @@ To use this action, the following prerequisites must be met on Azure -
 ```json
 {
   "imageName": "nginx:1.17",
+  "vulnerabilityScanTimestamp": "2020-12-01T08:28:54.245Z",
   "vulnerabilities": [
     {
       "vulnerabilityId": "CVE-2020-10878",
