@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 export interface ScanProperties {
   __version: string;
   context: ScanContext;
