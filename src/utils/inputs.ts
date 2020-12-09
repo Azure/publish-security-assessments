@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import * as core from '@actions/core';
 
 const SUBSCRIPTION_TOKEN_SEPARATOR = '.';
