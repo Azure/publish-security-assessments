@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import * as core from '@actions/core';
 import * as AzureAppInsights from '../azure/azureAppInsights';
 import * as ContainerScanHelper from '../scanHelpers/containerScanHelper';

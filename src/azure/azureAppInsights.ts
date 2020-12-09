@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import * as core from '@actions/core';
 import * as Inputs from '../utils/inputs';
 let appInsights = require('applicationinsights');

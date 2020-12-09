@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { v4 as uuidv4 } from 'uuid';
 import appInsights from 'applicationinsights';
 import * as ExecHelper from '../utils/execHelper';
