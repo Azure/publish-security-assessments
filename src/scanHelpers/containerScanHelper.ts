@@ -9,7 +9,7 @@ import * as Inputs from '../utils/inputs';
 import { ScanProperties, ScanContext, Vulnscan, ScanWorkflow, SeverityVulnIdentifiers } from '../azure/scanResultContracts';
 
 export const TRIVY = 'trivy';
-const EVENT_NAME = 'Ms.CloudSecurity.CI.ScanResult';
+const EVENT_NAME = 'MS.CloudSecurity.CI.ScanResult';
 const PROVIDER_NAME = 'githubAction';
 const IMAGE_NAME_KEY = 'imageName';
 const VULNERABILITIES_KEY = 'vulnerabilities';
