@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { v4 as uuidv4 } from 'uuid';
-import appInsights from 'applicationinsights';
+import * as ApplicationInsights from 'applicationinsights';
 import * as ExecHelper from '../utils/execHelper';
 import * as FileHelper from '../utils/fileHelper';
 import * as Inputs from '../utils/inputs';
@@ -18,11 +18,10 @@ const TIMESTAMP_KEY = 'vulnerabilityScanTimestamp';
 const SEVERITY_KEY = 'severity';
 const CVE = 'cve';
 const IMAGE_DIGEST_SEPARATOR = '@';
-const MIN_CONTAINER_SCAN_VERSION = 'v0.1';
 
-export async function getEventData(): Promise<appInsights.Contracts.EventTelemetry> {
+export async function getEventData(): Promise<ApplicationInsights.Contracts.EventTelemetry> {
   const eventProperties = await getEventProperties();
-  const eventData: appInsights.Contracts.EventTelemetry = {
+  const eventData: ApplicationInsights.Contracts.EventTelemetry = {
     name: EVENT_NAME,
     properties: eventProperties
   };
@@ -32,10 +31,10 @@ export async function getEventData(): Promise<appInsights.Contracts.EventTelemet
 
 async function getEventProperties(): Promise<ScanProperties> {
   const containerScanResult = getContainerScanResult();
-  const imageName = containerScanResult[IMAGE_NAME_KEY];
-  const scanTime = containerScanResult[TIMESTAMP_KEY];
+  const imageName = containerScanResult[IMAGE_NAME_KEY] || '';
+  const scanTime = containerScanResult[TIMESTAMP_KEY] || '';
   if (!imageName || !scanTime) {
-    throw new Error(`Could not find image name and/or scan timestamp. Please ensure that you are using container-scan version >= '${MIN_CONTAINER_SCAN_VERSION}'`);
+    throw new Error(`Could not find image name and/or scan timestamp. Image name: '${imageName}', Scan timestamp: ${scanTime}`);
   }
 
   const imageDigest = await getImageDigest(imageName);
@@ -116,7 +115,13 @@ function getIdentifiers(containerScanResult: any): SeverityVulnIdentifiers[] {
     severityVulnIdentifiers.values.push(vulnerability[VULNERABILITY_ID_KEY]);
   });
 
-  return identifiers;
+  // Remove duplicate identifiers.
+  // The list of IDs may contain duplicates because container scan reports vulnerabilities against packages
+  // and multiple packages may contain the same vulnerabilities.
+  return identifiers.map((identifier) => {
+    identifier.values = [...new Set(identifier.values)];
+    return identifier;
+  });
 }
 
 function getContainerScanResult(): any {
