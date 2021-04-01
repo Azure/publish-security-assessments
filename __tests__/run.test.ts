@@ -160,6 +160,7 @@ describe('Testing all functions in containerScanHelper file.', () => {
         const currentProcessEnv = process.env
         process.env.GITHUB_SHA = 'GithubSHA' 
         process.env.GITHUB_REF = 'master'
+        process.env.GITHUB_RUN_ID = '25'
 
         const recievedEventData = await containerScanHelper.getEventData();
         delete recievedEventData.properties.requestId;
@@ -193,8 +194,8 @@ describe('Testing all functions in containerScanHelper file.', () => {
                   "GITHUB_SHA": "GithubSHA"
                 },
                 "provider": "githubAction",
-                "repositoryUrl": "https://github.com/undefined",
-                "runUrl": "https://github.com/undefined/actions/runs/undefined"
+                "repositoryUrl": "https://github.com/Azure/publish-security-assessments",
+                "runUrl": "https://github.com/Azure/publish-security-assessments/actions/runs/25"
               }
             }
         }
