@@ -1,4 +1,4 @@
-# Publish Security Scans
+# Publish Security Scans 
 
 This action can be used to publish security assessments done as part of CI workflows on GitHub to Azure Security Center. This will help to enhance the security posture of resources on Azure by shifting left and getting visibility of the security scans done earlier in the software supply chain.
 
