@@ -56,42 +56,13 @@ To use this action, the following prerequisites must be met on Azure -
     </tr>
 </table>
 
-## Scan Results Schema
-
-### Container Image
-
-```json
-{
-  "imageName": "nginx:1.17",
-  "vulnerabilityScanTimestamp": "2020-12-01T08:28:54.245Z",
-  "vulnerabilities": [
-    {
-      "vulnerabilityId": "CVE-2020-10878",
-      "packageName": "perl-base",
-      "severity": "HIGH",
-      "description": "..."
-    },
-    ...
-  ],
-  "bestPracticeViolations": [
-    {
-      "code": "CIS-DI-0001",
-      "title": "Create a user for the container",
-      "level": "WARN",
-      "alerts": "Last user should not be root"
-    },
-    ...
-  ]
-}
-```
-
 ## Sample Yaml snippets
 
 ### Publish container scan results to ASC
 
 ```yaml
 - name: Publish container scan results to ASC
-  uses: azure/publish-security-assessments@v1
+  uses: azure/publish-security-assessments@v0
   with:
     artifact-type: containerImage
     subscription-token: ${{ secrets.asc_subscription_token }}
@@ -127,7 +98,7 @@ jobs:
         image-name: contoso.azurecr.io/k8sdemo:${{ github.sha }}
 
     - name: Publish container scan results to ASC
-      uses: azure/publish-security-assessments@v1
+      uses: azure/publish-security-assessments@v0
       with:
         subscription-token: ${{ secrets.asc_subscription_token }}
         instrumentation-key: ${{ secrets.ai_instrumentation_key }}
@@ -140,6 +111,85 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: docker push contoso.azurecr.io/k8sdemo:${{ github.sha }}
+```
+
+## Scan Results Schema
+
+### Container Scan result
+
+```json
+{
+  "imageName": "nginx:1.17",
+  "vulnerabilityScanTimestamp": "2020-12-01T08:28:54.245Z",
+  "vulnerabilities": [
+    {
+      "vulnerabilityId": "CVE-2020-10878",
+      "packageName": "perl-base",
+      "severity": "HIGH",
+      "description": "..."
+    },
+    ...
+  ],
+  "bestPracticeViolations": [
+    {
+      "code": "CIS-DI-0001",
+      "title": "Create a user for the container",
+      "level": "WARN",
+      "alerts": "Last user should not be root"
+    },
+    ...
+  ]
+}
+```
+
+### Sample ScanResult event
+
+```json
+{
+    "name": "MS.CloudSecurity.CI.ScanResult",
+    "properties": {
+        "__version": "0.1",
+        "context": {
+            "artifactType": "containerImage",
+            "artifactId": "sha256:d8a928b2043db77e340b523547bf16cb4aa483f0645fe0a290ed1f20aab76257",
+            "requestId": "7a432b5e-dfbd-4a83-a72a-03c15a43606c",
+            "token": "***"
+        },
+        "workflow": {
+            "provider": "githubAction",
+            "runUrl": "https://github.com/octocat/hello-world/actions/runs/12345",
+            "repositoryUrl": "https://github.com/octocat/hello-world",
+            "additionalData": {
+                "GITHUB_REF": "refs/heads/check",
+                "GITHUB_SHA": "eca0572326b3a8bb4423c8ab2482d1e9f59df6c3"
+            }
+        },
+        "vulnscan": {
+            "provider": "trivy",
+            "scanTime": "2021-06-14T11:05:33.154Z",
+            "identifiers": [
+                {
+                    "severity": "HIGH",
+                    "type": "cve",
+                    "values": [
+                        "CVE-2018-12886",
+                        "CVE-2019-15847"
+                    ]
+                },
+                {
+                    "severity": "CRITICAL",
+                    "type": "cve",
+                    "values": [
+                        "CVE-2019-20367",
+                        "CVE-2021-33574",
+                        "CVE-2021-20231"
+                    ]
+                }
+            ],
+            "allowList": []
+        }
+    }
+}
 ```
 
 # Contributing
