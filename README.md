@@ -77,8 +77,11 @@ The following is an example of not just this action, but how this action could b
 This workflow does the following -
 - Build a docker image 
 - Scan the docker image for any security vulnerabilities
-- Publish scan results to ASC
 - Publish it to your private container registry.
+- Publish scan results to ASC
+
+_Note: Currently, the image must be published to the container registry prior to publishing the scan results._
+
 
 ```yaml
 on: [push]
@@ -96,13 +99,6 @@ jobs:
       uses: Azure/container-scan@v0
       with:
         image-name: contoso.azurecr.io/k8sdemo:${{ github.sha }}
-
-    - name: Publish container scan results to ASC
-      uses: azure/publish-security-assessments@v0
-      with:
-        subscription-token: ${{ secrets.asc_subscription_token }}
-        instrumentation-key: ${{ secrets.ai_instrumentation_key }}
-        scan-results-path: ${{ steps.container_scan.outputs.scan-report-path }}
     
     - uses: Azure/docker-login@v1
       with:
@@ -111,6 +107,14 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: docker push contoso.azurecr.io/k8sdemo:${{ github.sha }}
+
+    - name: Publish container scan results to ASC
+      uses: azure/publish-security-assessments@v0
+      with:
+        subscription-token: ${{ secrets.asc_subscription_token }}
+        instrumentation-key: ${{ secrets.ai_instrumentation_key }}
+        scan-results-path: ${{ steps.container_scan.outputs.scan-report-path }}
+
 ```
 
 ## Scan Results Schema
