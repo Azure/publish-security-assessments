@@ -1,5 +1,10 @@
 # Publish Security Scans
+## Deprecation Notice
+This project is no longer actively maintained, and has had some deficiencies for sometime now. If anyone is interested to implement the action logic on their own or fork the repo then feel free to do so.
 
+This action may be archived in the future, but it will still be consumable in the workflows. Just that it won't be maintained in the future.
+
+## Overview
 This action can be used to publish security assessments done as part of CI workflows on GitHub to Azure Security Center. This will help to enhance the security posture of resources on Azure by shifting left and getting visibility of the security scans done earlier in the software supply chain.
 
 ## Prerequisites
